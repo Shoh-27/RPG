@@ -11,6 +11,16 @@ use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user();
+
+        $xp = $user->xp;
+        $neededXp = $user->level * 100;
+        $progress = ($xp / $neededXp) * 100;
+
+        return view('profile.index', compact('user', 'progress', 'neededXp'));
+    }
     /**
      * Display the user's profile form.
      */
