@@ -30,10 +30,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// routes/web.php
+
+// User uchun
 Route::middleware('auth')->group(function () {
     Route::get('/challenges', [ChallengeController::class, 'index'])->name('challenges.index');
     Route::post('/challenges/{challenge}/submit', [SubmissionController::class, 'store'])->name('submissions.store');
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 });
+
+// Admin uchun
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin/challenges', [ChallengeController::class, 'allChallenges'])->name('admin.challenges');
+    Route::post('/admin/challenges', [ChallengeController::class, 'store'])->name('admin.challenges.store');
+    Route::get('/admin/submissions', [SubmissionController::class, 'index'])->name('admin.submissions');
+    Route::post('/admin/submissions/{submission}/status', [SubmissionController::class, 'updateStatus'])->name('admin.submissions.update');
+});
+
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
 
