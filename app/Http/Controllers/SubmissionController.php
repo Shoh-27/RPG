@@ -9,6 +9,19 @@ use App\Models\Challenge;
 class SubmissionController extends Controller
 {
     /**
+     * Foydalanuvchi faqat o‘z submissionlarini ko‘radi
+     */
+    public function mySubmissions()
+    {
+        $submissions = Submission::with('challenge')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->get();
+
+        return view('submissions.my', compact('submissions'));
+    }
+
+    /**
      * Foydalanuvchi → GitHub link yuboradi
      */
     public function store(Request $request, Challenge $challenge)

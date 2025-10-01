@@ -24,6 +24,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+use App\Http\Controllers\LeaderboardController;
+
+Route::get('/leaderboard', [LeaderboardController::class, 'index'])
+    ->name('leaderboard.index');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -52,5 +57,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');
+Route::get('/my-submissions', [SubmissionController::class, 'mySubmissions'])
+    ->name('submissions.my')
+    ->middleware('auth');
 
 require __DIR__.'/auth.php';
