@@ -41,11 +41,14 @@ Route::middleware('auth')->group(function () {
 
 // Admin uchun
 Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('/admin/challenges', [ChallengeController::class, 'allChallenges'])->name('admin.challenges');
+    Route::get('/admin/challenges', [ChallengeController::class, 'allChallenges'])->name('admin.challenges.index');
+    Route::get('/admin/challenges/create', [ChallengeController::class, 'create'])->name('admin.challenges.create');
     Route::post('/admin/challenges', [ChallengeController::class, 'store'])->name('admin.challenges.store');
-    Route::get('/admin/submissions', [SubmissionController::class, 'index'])->name('admin.submissions');
-    Route::post('/admin/submissions/{submission}/status', [SubmissionController::class, 'updateStatus'])->name('admin.submissions.update');
+    Route::get('/admin/challenges/{challenge}/edit', [ChallengeController::class, 'edit'])->name('admin.challenges.edit');
+    Route::put('/admin/challenges/{challenge}', [ChallengeController::class, 'update'])->name('admin.challenges.update');
+    Route::delete('/admin/challenges/{challenge}', [ChallengeController::class, 'destroy'])->name('admin.challenges.destroy');
 });
+
 
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index')->middleware('auth');

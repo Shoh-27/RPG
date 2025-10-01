@@ -49,4 +49,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+
+    public function challenges()
+    {
+        return $this->hasMany(Challenge::class);
+    }
 }

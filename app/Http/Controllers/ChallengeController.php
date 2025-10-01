@@ -7,6 +7,20 @@ use App\Models\Challenge;
 
 class ChallengeController extends Controller
 {
+    public function index()
+    {
+        $user = auth()->user();
+
+        // Foydalanuvchi leveliga mos challenge’larni olish
+        $challenges = Challenge::where('level', $user->level)->get();
+
+        if ($challenges->isEmpty()) {
+            return view('challenges.index')->with('message', 'Hozircha siz uchun challenge yo‘q.');
+        }
+
+        return view('challenges.index', compact('challenges'));
+    }
+
     /**
      * Admin uchun — barcha challenge’larni ko‘rish
      */
