@@ -35,7 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// routes/web.php
+Route::post('/challenges/{challenge}/start', [SubmissionController::class, 'startChallenge'])
+    ->name('challenges.start')
+    ->middleware('auth');
+
 
 // User uchun
 Route::middleware('auth')->group(function () {

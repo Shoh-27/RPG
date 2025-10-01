@@ -109,5 +109,29 @@ class SubmissionController extends Controller
         return back()->with('success', '✅ Submission status yangilandi!');
     }
 
+    public function startChallenge(Challenge $challenge)
+    {
+        $user = auth()->user();
+
+        // Agar user allaqachon boshlagan bo‘lsa qaytaramiz
+        $existing = Submission::where('user_id', $user->id)
+            ->where('challenge_id', $challenge->id)
+            ->first();
+
+        if ($existing && $existing->started_at) {
+            return back()->with('info', 'Siz bu challenge’ni allaqachon boshlagansiz!');
+        }
+
+        $submission = Submission::updateOrCreate(
+            ['user_id' => $user->id, 'challenge_id' => $challenge->id],
+            [
+                'started_at' => now(),
+                'deadline' => now()->addDays($challenge->duration_days),
+                'status' => 'pending',
+            ]
+        );
+
+        return back()->with('success', '🚀 Challenge boshlandi! Deadline: ' . $submission->deadline->format('d M Y H:i'));
+    }
 
 }
