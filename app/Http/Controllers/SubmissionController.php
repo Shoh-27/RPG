@@ -67,28 +67,39 @@ class SubmissionController extends Controller
     public function updateStatus(Request $request, Submission $submission)
     {
         $request->validate([
-            'status' => ['required', 'in:approved,rejected'],
+            'status' => 'required|in:approved,rejected',
+            'xp' => 'nullable|integer|min:0',
+            'comment' => 'nullable|string|max:500'
         ]);
 
-        $submission->update([
-            'status' => $request->status,
-        ]);
+        // Status yangilash
+        $submission->status = $request->status;
 
-        // ✅ Agar approved bo‘lsa → foydalanuvchiga XP beriladi
-        if ($request->status === 'approved') {
+        // Izohni saqlash
+        if ($request->filled('comment')) {
+            $submission->comment = $request->comment;
+        }
+
+        // Agar approved bo‘lsa XP beramiz
+        if ($request->status === 'approved' && $request->filled('xp')) {
+            $submission->xp_awarded = $request->xp; // submission jadvalida xp_awarded maydoni bo‘lsin
+
+            // Userga XP qo‘shamiz
             $user = $submission->user;
-            $challenge = $submission->challenge;
+            $user->xp += $request->xp;
 
-            $user->xp += $challenge->xp_reward;
-
-            // XP → level calculation (masalan: har 100 XP da level up)
-            while ($user->xp >= $user->level * 100) {
-                $user->level++;
+            // Level system: har 100 XP = 1 level (misol uchun)
+            while ($user->xp >= 100) {
+                $user->xp -= 100;
+                $user->level += 1;
             }
 
             $user->save();
         }
 
-        return back()->with('success', '✅ Submission status yangilandi!');
+        $submission->save();
+
+        return back()->with('success', 'Submission updated successfully!');
     }
+
 }

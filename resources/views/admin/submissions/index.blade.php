@@ -49,9 +49,33 @@
 
                                 <form action="{{ route('admin.submissions.updateStatus', $submission) }}" method="POST" class="d-inline">
                                     @csrf
+                                    <input type="hidden" name="status" value="approved">
+
+                                    <div class="form-group mb-2">
+                                        <label>XP berish:</label>
+                                        <input type="number" name="xp" class="form-control form-control-sm" placeholder="Masalan: 80" required>
+                                    </div>
+
+                                    <div class="form-group mb-2">
+                                        <label>Izoh:</label>
+                                        <textarea name="comment" class="form-control form-control-sm" placeholder="Nima uchun 80 XP berildi?"></textarea>
+                                    </div>
+
+                                    <button class="btn btn-success btn-sm">✅ Approve</button>
+                                </form>
+
+                                <form action="{{ route('admin.submissions.updateStatus', $submission) }}" method="POST" class="d-inline">
+                                    @csrf
                                     <input type="hidden" name="status" value="rejected">
+
+                                    <div class="form-group mb-2">
+                                        <label>Izoh (nechun reject):</label>
+                                        <textarea name="comment" class="form-control form-control-sm"></textarea>
+                                    </div>
+
                                     <button class="btn btn-danger btn-sm">❌ Reject</button>
                                 </form>
+
                             @endif
                         </div>
                     </div>
