@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Submission;
 use App\Models\Challenge;
+use Illuminate\Support\Facades\DB;
 
 class SubmissionController extends Controller
 {
@@ -72,34 +73,41 @@ class SubmissionController extends Controller
             'comment' => 'nullable|string|max:500'
         ]);
 
-        // Status yangilash
-        $submission->status = $request->status;
-
-        // Izohni saqlash
-        if ($request->filled('comment')) {
-            $submission->comment = $request->comment;
+        // Prevent double-processing
+        if ($submission->status !== 'pending') {
+            return back()->with('warning', 'Bu submission allaqachon tekshirilgan.');
         }
 
-        // Agar approved bo‘lsa XP beramiz
-        if ($request->status === 'approved' && $request->filled('xp')) {
-            $submission->xp_awarded = $request->xp; // submission jadvalida xp_awarded maydoni bo‘lsin
-
-            // Userga XP qo‘shamiz
-            $user = $submission->user;
-            $user->xp += $request->xp;
-
-            // Level system: har 100 XP = 1 level (misol uchun)
-            while ($user->xp >= 100) {
-                $user->xp -= 100;
-                $user->level += 1;
+        DB::transaction(function () use ($request, $submission) {
+            // Default xp — challenge xp_reward yoki admin kiritgan xp
+            $xpToAdd = null;
+            if ($request->status === 'approved') {
+                $xpToAdd = $request->filled('xp') ? (int)$request->xp : (int)$submission->challenge->xp_reward;
+                $submission->xp_awarded = $xpToAdd;
+            } else {
+                $submission->xp_awarded = 0;
             }
 
-            $user->save();
-        }
+            if ($request->filled('comment')) {
+                $submission->comment = $request->comment;
+            }
 
-        $submission->save();
+            // Avval submission status va meta saqlaymiz
+            $submission->status = $request->status;
+            $submission->save();
 
-        return back()->with('success', 'Submission updated successfully!');
+            // Foydalanuvchiga XP faqat approved bo'lsa beriladi
+            if ($request->status === 'approved' && $xpToAdd > 0) {
+                // Userni lock qilish — race condition oldini olish uchun
+                $user = \App\Models\User::where('id', $submission->user_id)->lockForUpdate()->first();
+
+                // addXp() metodidan foydalanamiz (yuqorida yozilgan)
+                $user->addXp($xpToAdd);
+            }
+        });
+
+        return back()->with('success', '✅ Submission status yangilandi!');
     }
+
 
 }

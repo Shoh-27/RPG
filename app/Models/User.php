@@ -69,4 +69,20 @@ class User extends Authenticatable
         return min($progress, 100); // 100% dan oshmasin
     }
 
+    public function addXp(int $xp)
+    {
+        // $this->xp — hozirgi progress (XP toward next level)
+        $this->xp += $xp;
+
+        // Level uchun kerakli XP har levelga qarab oshadi (masalan: level * 100)
+        while ($this->xp >= ($this->level * 100)) {
+            // avvalgi level uchun kerakli miqdorni olib tashlaymiz
+            $this->xp -= ($this->level * 100);
+            $this->level++;
+        }
+
+        $this->save();
+    }
+
+
 }
