@@ -9,7 +9,7 @@ use App\Models\Challenge;
 class SubmissionController extends Controller
 {
     /**
-     * User uchun — GitHub link yuborish
+     * User → GitHub link yuboradi
      */
     public function store(Request $request, Challenge $challenge)
     {
@@ -17,7 +17,6 @@ class SubmissionController extends Controller
             'github_link' => 'required|url',
         ]);
 
-        // Submission yaratamiz
         Submission::create([
             'user_id' => auth()->id(),
             'challenge_id' => $challenge->id,
@@ -25,11 +24,11 @@ class SubmissionController extends Controller
             'status' => 'pending',
         ]);
 
-        return back()->with('success', '✅ Loyihangiz yuborildi, admin tekshiradi!');
+        return back()->with('success', '✅ Loyihangiz yuborildi! Admin tekshiradi.');
     }
 
     /**
-     * Admin uchun — barcha submissionlarni ko‘rish
+     * Admin → barcha submissionlarni ko‘rish
      */
     public function index()
     {
@@ -38,7 +37,7 @@ class SubmissionController extends Controller
     }
 
     /**
-     * Admin uchun — submissionni tasdiqlash yoki rad etish
+     * Admin → tasdiqlash yoki rad etish
      */
     public function updateStatus(Request $request, Submission $submission)
     {
@@ -49,14 +48,14 @@ class SubmissionController extends Controller
         $submission->status = $request->status;
         $submission->save();
 
-        // Agar approved bo‘lsa → userga XP qo‘shamiz
+        // Agar approved bo‘lsa XP qo‘shamiz
         if ($submission->status === 'approved') {
             $user = $submission->user;
             $challenge = $submission->challenge;
 
             $user->xp += $challenge->xp_reward;
 
-            // Level up tekshirish
+            // XP 100 ga teng yoki oshsa → level up
             if ($user->xp >= $user->level * 100) {
                 $user->level++;
             }

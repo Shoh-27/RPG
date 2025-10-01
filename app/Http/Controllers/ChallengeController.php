@@ -11,15 +11,12 @@ class ChallengeController extends Controller
     {
         $user = auth()->user();
 
-        // Foydalanuvchi leveliga mos challenge’larni olish
-        $challenges = Challenge::where('level', $user->level)->get();
+        // faqat bitta challenge qaytaradi
+        $challenge = Challenge::where('level', $user->level)->first();
 
-        if ($challenges->isEmpty()) {
-            return view('challenges.index')->with('message', 'Hozircha siz uchun challenge yo‘q.');
-        }
-
-        return view('challenges.index', compact('challenges'));
+        return view('challenges.index', compact('challenge'));
     }
+
 
     /**
      * Admin uchun — barcha challenge’larni ko‘rish
