@@ -54,4 +54,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Challenge::class);
     }
+
+    public function xpToNextLevel()
+    {
+        // Masalan: har level uchun 100 XP kerak
+        return $this->level * 100;
+    }
+
+    public function currentProgress()
+    {
+        $needed = $this->xpToNextLevel();
+        $progress = ($this->xp / $needed) * 100;
+
+        return min($progress, 100); // 100% dan oshmasin
+    }
+
 }

@@ -1,17 +1,20 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+{{-- resources/views/dashboard.blade.php --}}
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('content')
+    <div class="container">
+        @auth
+            <h3>Salom, {{ auth()->user()->name }}!</h3>
+            <p>Level: {{ auth()->user()->level }}</p>
+            <p>XP: {{ auth()->user()->xp }} / {{ auth()->user()->xpToNextLevel() }}</p>
+
+            <div class="progress" style="height:20px">
+                <div class="progress-bar" role="progressbar" style="width: {{ auth()->user()->currentProgress() }}%">
+                    {{ round(auth()->user()->currentProgress()) }}%
                 </div>
             </div>
-        </div>
+        @else
+            <div class="alert alert-info">Iltimos tizimga kiring.</div>
+        @endauth
     </div>
-</x-app-layout>
+@endsection
