@@ -11,11 +11,20 @@ class ChallengeController extends Controller
     {
         $user = auth()->user();
 
-        // faqat bitta challenge qaytaradi
-        $challenge = Challenge::where('level', $user->level)->first();
+        // Hamma challenge’larni olamiz
+        $challenges = Challenge::orderBy('level')->get();
 
-        return view('challenges.index', compact('challenge'));
+        // Foydalanuvchi faqat o‘z leveligacha ko‘rishi mumkin
+        $availableChallenges = $challenges->filter(function ($challenge) use ($user) {
+            return $challenge->level <= $user->level;
+        });
+
+        return view('challenges.index', [
+            'challenges' => $availableChallenges,
+            'user' => $user,
+        ]);
     }
+
 
 
     /**
