@@ -122,7 +122,7 @@ class SubmissionController extends Controller
             return back()->with('info', 'Siz bu challenge’ni allaqachon boshlagansiz!');
         }
 
-        $submission = Submission::updateOrCreate(
+        $submission = Submission::Create(
             ['user_id' => $user->id, 'challenge_id' => $challenge->id],
             [
                 'started_at' => now(),

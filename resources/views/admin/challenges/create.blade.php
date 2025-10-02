@@ -21,6 +21,10 @@
                 <label>XP Mukofot</label>
                 <input type="number" name="xp_reward" class="form-control" value="100" required>
             </div>
+            <div class="mb-3">
+                <label for="duration_days">⏳ Vaqt (kunlarda)</label>
+                <input type="number" name="duration_days" id="duration_days" class="form-control" required min="1">
+            </div>
             <button class="btn btn-success">✅ Saqlash</button>
         </form>
     </div>

@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('challenges', function (Blueprint $table) {
-            $table->integer('duration_days')->default(7); // Admin nechi kun beradi
+            $table->integer('duration_days')->default(2); // Admin nechi kun beradi
         });
 
         Schema::table('submissions', function (Blueprint $table) {

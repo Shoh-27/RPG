@@ -53,12 +53,20 @@ class ChallengeController extends Controller
             'level' => 'required|integer',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'xp_reward' => 'required|integer',
+            'xp_reward' => 'required|integer|min:1',
+            'duration_days' => 'required|integer|min:1'
         ]);
 
-        Challenge::create($request->all());
+        Challenge::create([
+            'level' => $request->level,
+            'title' => $request->title,
+            'description' => $request->description,
+            'xp_reward' => $request->xp_reward,
+            'duration_days' => $request->duration_days
+        ]);
 
-        return redirect()->route('admin.challenges.index')->with('success', '✅ Challenge qo‘shildi!');
+        return redirect()->route('admin.challenges.index')
+            ->with('success', '✅ Challenge qo‘shildi!');
     }
 
     /**
