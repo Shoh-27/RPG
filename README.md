@@ -13,27 +13,20 @@ Adminlar challenge va submissionlarni boshqarishi mumkin.
 
 ## 🔧 O‘rnatish
 1. Repository’ni clone qiling:
-   ```bash
    git clone https://github.com/Shoh-27/RPG.git
    cd RPG
-````
+
 
 2. Composer install qiling:
-
-   ```bash
    composer install
-   ```
+  
 3. `.env` fayl yarating va ma’lumotlar bazasi sozlamalarini kiriting.
 4. Migration va seederlarni ishga tushiring:
-
-   ```bash
    php artisan migrate --seed
-   ```
-5. Local serverni ishga tushiring:
 
-   ```bash
+5. Local serverni ishga tushiring:
    php artisan serve
-   ```
+
 
 ## ✨ Xususiyatlar
 
