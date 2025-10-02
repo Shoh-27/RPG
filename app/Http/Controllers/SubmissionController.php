@@ -109,29 +109,24 @@ class SubmissionController extends Controller
         return back()->with('success', '✅ Submission status yangilandi!');
     }
 
-    public function startChallenge(Challenge $challenge)
+    public function start(Challenge $challenge)
     {
         $user = auth()->user();
 
-        // Agar user allaqachon boshlagan bo‘lsa qaytaramiz
-        $existing = Submission::where('user_id', $user->id)
-            ->where('challenge_id', $challenge->id)
-            ->first();
-
-        if ($existing && $existing->started_at) {
-            return back()->with('info', 'Siz bu challenge’ni allaqachon boshlagansiz!');
+        // Foydalanuvchi challenge bosgan vaqtni saqlash
+        // (agar avval start bosmagan bo‘lsa)
+        if (!$user->startedChallenges()->where('challenge_id', $challenge->id)->exists()) {
+            $user->startedChallenges()->attach($challenge->id, [
+                'started_at' => now()
+            ]);
         }
 
-        $submission = Submission::Create(
-            ['user_id' => $user->id, 'challenge_id' => $challenge->id],
-            [
-                'started_at' => now(),
-                'deadline' => now()->addDays($challenge->duration_days),
-                'status' => 'pending',
-            ]
-        );
+        // Boshlangan vaqtni olish
+        $pivot = $user->startedChallenges()->where('challenge_id', $challenge->id)->first()->pivot;
+        $deadline = \Carbon\Carbon::parse($pivot->started_at)->addDays($challenge->duration_days);
 
-        return back()->with('success', '🚀 Challenge boshlandi! Deadline: ' . $submission->deadline->format('d M Y H:i'));
+        return view('challenges.start', compact('challenge', 'deadline'));
     }
+
 
 }

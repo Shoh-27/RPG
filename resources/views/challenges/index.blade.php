@@ -13,23 +13,33 @@
                     <p><strong>Duration:</strong> {{ $challenge->duration_days }} kun</p>
 
                     @php
-                        $submission = $challenge->submissions()
-                            ->where('user_id', auth()->id())
-                            ->first();
+                        $pivot = auth()->user()
+                            ->startedChallenges()
+                            ->where('challenge_id', $challenge->id)
+                            ->first()?->pivot;
                     @endphp
 
-                    {{-- Agar user boshlamagan bo‘lsa --}}
-                    @if(!$submission || !$submission->started_at)
-                        <form action="{{ route('challenges.start', $challenge) }}" method="POST">
-                            @csrf
-                            <button class="btn btn-primary">🚀 Start Challenge</button>
-                        </form>
+                    {{-- Agar user hali boshlamagan bo‘lsa --}}
+                    @if(!$pivot)
+                        <a href="{{ route('challenges.start', $challenge) }}" class="btn btn-primary">
+                            🚀 Start Challenge
+                        </a>
                     @else
-                        <p><strong>Started:</strong> {{ $submission->started_at->format('d M Y H:i') }}</p>
-                        <p><strong>Deadline:</strong> {{ $submission->deadline->format('d M Y H:i') }}</p>
+                        <p><strong>Started:</strong> {{ \Carbon\Carbon::parse($pivot->started_at)->format('d M Y H:i') }}</p>
+                        <p>
+                            <strong>Deadline:</strong>
+                            {{ \Carbon\Carbon::parse($pivot->started_at)->addDays($challenge->duration_days)->format('d M Y H:i') }}
+                        </p>
 
-                        {{-- Agar hali topshirmagan bo‘lsa --}}
-                        @if($submission->status === 'pending')
+                        {{-- Submissionni tekshirish --}}
+                        @php
+                            $submission = $challenge->submissions()
+                                ->where('user_id', auth()->id())
+                                ->latest()
+                                ->first();
+                        @endphp
+
+                        @if(!$submission)
                             <form action="{{ route('submissions.store', $challenge) }}" method="POST">
                                 @csrf
                                 <input type="url" name="github_link" class="form-control mb-2" required placeholder="https://github.com/username/repo">
@@ -37,6 +47,9 @@
                             </form>
                         @else
                             <p><strong>Status:</strong> {{ ucfirst($submission->status) }}</p>
+                            @if($submission->comment)
+                                <p><strong>Admin izohi:</strong> {{ $submission->comment }}</p>
+                            @endif
                         @endif
                     @endif
                 </div>

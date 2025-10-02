@@ -84,5 +84,13 @@ class User extends Authenticatable
         $this->save();
     }
 
+    public function startedChallenges()
+    {
+        return $this->belongsToMany(Challenge::class, 'challenge_user')
+            ->withPivot('started_at')
+            ->withTimestamps();
+    }
+
+
 
 }
