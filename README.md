@@ -1,11 +1,9 @@
-````markdown
 # 🚀 Challenge Platform
 
 Laravel asosida yaratilgan o‘quv va musobaqa platformasi.  
 Foydalanuvchilar XP yig‘ib, level oshiradi va turli xil challenge’larni bajarib boradi.  
 Adminlar challenge va submissionlarni boshqarishi mumkin.  
 
----
 
 ## ⚙️ Texnologiyalar
 - [Laravel](https://laravel.com/) – Backend framework
@@ -13,13 +11,11 @@ Adminlar challenge va submissionlarni boshqarishi mumkin.
 - [Tailwind CSS](https://tailwindcss.com/) – Frontend dizayni
 - [Blade Templates](https://laravel.com/docs/blade) – UI renderlash
 
----
-
 ## 🔧 O‘rnatish
 1. Repository’ni clone qiling:
    ```bash
-   git clone https://github.com/username/repo-name.git
-   cd repo-name
+   git clone https://github.com/Shoh-27/RPG.git
+   cd RPG
 ````
 
 2. Composer install qiling:
@@ -55,6 +51,4 @@ Adminlar challenge va submissionlarni boshqarishi mumkin.
 * 🎮 Live multiplayer challenge rejimi
 * 📱 Mobilga mos UI
 
-
-```
 
