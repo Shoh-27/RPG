@@ -77,7 +77,7 @@ class User extends Authenticatable
         // Level uchun kerakli XP har levelga qarab oshadi (masalan: level * 100)
         while ($this->xp >= ($this->level * 100)) {
             // avvalgi level uchun kerakli miqdorni olib tashlaymiz
-            $this->xp -= ($this->level * 100);
+//            $this->xp -= ($this->level * 100);
             $this->level++;
         }
 

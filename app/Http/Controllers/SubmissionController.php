@@ -37,7 +37,7 @@ class SubmissionController extends Controller
             ->first();
 
         if ($existing) {
-            return back()->with('error', '❌ Siz bu challenge uchun allaqachon topshiriq yuborgansiz.');
+            return redirect()->route('dashboard')->with('success', 'Challenge topshirildi!');
         }
 
         Submission::create([
@@ -83,7 +83,7 @@ class SubmissionController extends Controller
             $xpToAdd = null;
             if ($request->status === 'approved') {
                 $xpToAdd = $request->filled('xp') ? (int)$request->xp : (int)$submission->challenge->xp_reward;
-                $submission->xp_awarded = $xpToAdd;
+                $submission->xp_awarded =+ $xpToAdd;
             } else {
                 $submission->xp_awarded = 0;
             }
