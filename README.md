@@ -37,6 +37,12 @@ Adminlar challenge va submissionlarni boshqarishi mumkin.
 * 📂 Shaxsiy submissionlar ro‘yxati
 * 📊 XP va Level tizimi
 
+  <img width="1660" height="545" alt="image" src="https://github.com/user-attachments/assets/75774cc4-f258-4de9-a4af-7a8d00433fbe" />
+
+  <img width="1616" height="685" alt="image" src="https://github.com/user-attachments/assets/9ea3ebe1-9b89-4c45-a3f0-591c77a9649b" />
+
+
+
 ## 📌 Kelajak rejalari
 
 * 🔐 OAuth login (Google, GitHub)
