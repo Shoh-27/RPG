@@ -41,7 +41,7 @@ Adminlar challenge va submissionlarni boshqarishi mumkin.
 
   <img width="1616" height="685" alt="image" src="https://github.com/user-attachments/assets/9ea3ebe1-9b89-4c45-a3f0-591c77a9649b" />
 
-
+  <img width="1601" height="333" alt="image" src="https://github.com/user-attachments/assets/a26adeed-3d27-4d97-9891-8ce490d240ae" />
 
 ## 📌 Kelajak rejalari
 
